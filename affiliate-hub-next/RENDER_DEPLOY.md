@@ -16,7 +16,7 @@ If creating the service manually in Render:
 
 - Runtime: `Node`
 - Root Directory: `affiliate-hub-next`
-- Build Command: `npm ci && npm run build`
+- Build Command: `npm ci && npm run db:push && npm run build`
 - Start Command: `npm start`
 - Health Check Path: `/`
 
@@ -41,7 +41,7 @@ Keep `DEEPSEEK_API_KEY` private.
 
 The Blueprint provisions a Render PostgreSQL database and injects `DATABASE_URL` into the web service.
 
-The deploy runs:
+The Render free tier does not support a separate pre-deploy command, so the build command runs:
 
 ```txt
 npm run db:push

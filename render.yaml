@@ -5,8 +5,7 @@ services:
     plan: free
     region: frankfurt
     rootDir: affiliate-hub-next
-    buildCommand: npm ci && npm run build
-    preDeployCommand: npm run db:push
+    buildCommand: npm ci && npm run db:push && npm run build
     startCommand: npm start
     healthCheckPath: /
     autoDeployTrigger: commit
