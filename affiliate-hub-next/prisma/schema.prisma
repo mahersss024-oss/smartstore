@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AffiliateClick {
+  id             String   @id @default(cuid())
+  clickId        String   @unique
+  productId      String
+  productTitle   String
+  storeName      String
+  merchantName   String
+  source         String
+  campaign       String
+  searchQuery    String
+  destinationUrl String
+  createdAt      DateTime @default(now())
+
+  @@index([productId])
+  @@index([source])
+  @@index([campaign])
+  @@index([createdAt])
+}
+
+model AffiliateConversion {
+  id              String   @id @default(cuid())
+  clickId         String
+  network         String
+  orderId         String
+  orderValue      Float
+  commissionValue Float
+  currency        String
+  status          String
+  rawPayload      Json
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([network, orderId])
+  @@index([clickId])
+  @@index([network])
+  @@index([status])
+  @@index([createdAt])
+}

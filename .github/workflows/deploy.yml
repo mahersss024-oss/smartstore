@@ -1,0 +1,55 @@
+name: 🚀 Auto Deploy to Ubuntu Server
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🚀 Deploy Laravel App via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            echo "🔍 Detecting branch and setting path..."
+            if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+              export BRANCH_NAME=main
+              export DEPLOY_DIR=${{ secrets.PROD_DEPLOY_PATH }}
+            else
+              export BRANCH_NAME=dev
+              export DEPLOY_DIR=${{ secrets.DEV_DEPLOY_PATH }}
+            fi
+
+            echo "🚀 Deploying branch: $BRANCH_NAME"
+            cd $DEPLOY_DIR
+
+            echo "🔁 Pulling latest changes..."
+            git pull origin $BRANCH_NAME
+
+            echo "📦 Installing PHP dependencies..."
+            export COMPOSER_ALLOW_SUPERUSER=1
+            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+            echo "⚙️ Running Laravel commands..."
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            echo "🧱 Building frontend assets..."
+            npm ci
+            npm run build
+
+            echo "✅ Deployment of $BRANCH_NAME completed!"

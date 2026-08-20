@@ -1,0 +1,93 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+/* Re-assign Flux's gray of choice... */
+@theme {
+    --color-zinc-50: var(--color-slate-50);
+    --color-zinc-100: var(--color-slate-100);
+    --color-zinc-200: var(--color-slate-200);
+    --color-zinc-300: var(--color-slate-300);
+    --color-zinc-400: var(--color-slate-400);
+    --color-zinc-500: var(--color-slate-500);
+    --color-zinc-600: var(--color-slate-600);
+    --color-zinc-700: var(--color-slate-700);
+    --color-zinc-800: var(--color-slate-800);
+    --color-zinc-900: var(--color-slate-900);
+    --color-zinc-950: var(--color-slate-950);
+}
+
+@theme {
+    --color-accent: var(--color-teal-600);
+    --color-accent-content: var(--color-teal-600);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-teal-600);
+        --color-accent-content: var(--color-teal-400);
+        --color-accent-foreground: var(--color-white);
+    }
+}
+
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent;
+}
+
+
+.e-com-section {
+    @apply mx-auto w-full max-w-2xl px-2 md:px-6 lg:max-w-7xl
+}
+
+.e-com-card {
+    @apply rounded-lg p-1.5 sm:p-2.5 bg-none border dark:bg-zinc-700 dark:border-none
+}
+
+.checkbox-primary {
+    @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600
+}
+
+.file-input {
+    @apply text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+}
+
+.text-label {
+    @apply block font-medium text-sm text-gray-700 dark:text-gray-300 select-none
+}
+
+.radio-label {
+    @apply border dark:border-gray-600 has-[:checked]:bg-indigo-100 has-[:checked]:dark:bg-gray-600 has-[:checked]:border-indigo-400 has-[:checked]:dark:border-gray-300 rounded-md flex items-center px-3 py-2 space-x-2
+}
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */

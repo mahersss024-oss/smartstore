@@ -1,0 +1,5 @@
+@props([])
+
+<tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
+    {{ $slot }}
+</tbody> 

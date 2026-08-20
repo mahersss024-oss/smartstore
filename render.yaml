@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: smartstore-ai-affiliate-hub
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: affiliate-hub-next
+    buildCommand: npm ci && npm run build
+    preDeployCommand: npm run db:push
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: NEXT_PUBLIC_EMBED_CHECKOUT
+        value: "true"
+      - key: AFFILIATE_SUBID_PARAM
+        value: subid
+      - key: POSTBACK_SECRET
+        generateValue: true
+      - key: OWNER_DASHBOARD_USER
+        value: owner
+      - key: OWNER_DASHBOARD_PASSWORD
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: smartstore-ai-affiliate-db
+          property: connectionString
+      - key: NEXT_PUBLIC_AFFILIATE_API_URL
+        sync: false
+      - key: DEEPSEEK_API_URL
+        value: https://api.api.deepseek.com/v1
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: AI_MODEL_NAME
+        value: deepseek-chat
+
+databases:
+  - name: smartstore-ai-affiliate-db
+    plan: free
+    region: frankfurt
